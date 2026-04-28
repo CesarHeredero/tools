@@ -24,7 +24,23 @@ echo "════════════════════════�
 echo " [1/4] Descargando archivos desde Google Drive "
 echo "═══════════════════════════════════════════════"
 
-pip install -q gdown 2>/dev/null || warn "pip install gdown falló, asegúrate de que pip esté disponible"
+# Instalar pip si no está disponible
+if ! command -v pip3 &>/dev/null && ! command -v pip &>/dev/null; then
+  echo "Instalando python3-pip..."
+  sudo apt-get update -qq && sudo apt-get install -y -qq python3-pip
+fi
+
+# Instalar gdown (compatible con Debian 12 externally-managed-environment)
+if ! command -v gdown &>/dev/null; then
+  pip3 install gdown --break-system-packages 2>/dev/null \
+    || pip install gdown --break-system-packages 2>/dev/null \
+    || pip3 install gdown 2>/dev/null \
+    || pip install gdown 2>/dev/null \
+    || die "No se pudo instalar gdown. Ejecuta: sudo apt-get install -y python3-pip && pip3 install gdown --break-system-packages"
+fi
+
+command -v gdown &>/dev/null || die "gdown no encontrado tras la instalación"
+ok "gdown disponible"
 
 mkdir -p html
 TMP_DOWNLOAD=$(mktemp -d)
@@ -33,7 +49,8 @@ gdown --folder "https://drive.google.com/drive/folders/${DRIVE_FOLDER_ID}" \
       -O "${TMP_DOWNLOAD}/" 2>&1 || die "Error descargando desde Google Drive. ¿La carpeta es pública?"
 
 # Mover archivos descargados a ./html/
-INNER=$(ls -d "${TMP_DOWNLOAD}/*/" 2>/dev/null | head -1 || echo "${TMP_DOWNLOAD}")
+INNER=$(find "${TMP_DOWNLOAD}" -mindepth 1 -maxdepth 1 -type d | head -1)
+INNER="${INNER:-${TMP_DOWNLOAD}}"
 rsync -a "${INNER}/" ./html/ 2>/dev/null || cp -r "${INNER}/." ./html/
 rm -rf "${TMP_DOWNLOAD}"
 ok "Archivos copiados a ~/tools/html/"
