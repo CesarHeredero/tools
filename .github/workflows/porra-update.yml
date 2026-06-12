@@ -1,0 +1,35 @@
+name: Update Porra Results
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 6 AM UTC = 8 AM Spain (CEST)
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Copy update script to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 135.125.102.63
+          username: debian
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: "scripts/update_porra_results.py"
+          target: "/tmp/"
+
+      - name: Run update script on VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 135.125.102.63
+          username: debian
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            python3 /tmp/scripts/update_porra_results.py \
+              --out /home/debian/tools/html/porra/results.json
