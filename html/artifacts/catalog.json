@@ -1,0 +1,33 @@
+{
+  "artifacts": [
+    {
+      "id": "job-search-dashboard",
+      "title": "Job Search Dashboard",
+      "description": "Panel de control para el agente de búsqueda de empleo. Muestra ofertas encontradas, estado de candidaturas y métricas.",
+      "file": "job-search-dashboard.html",
+      "icon": "🔍",
+      "tags": ["automatización", "empleo"],
+      "date": "2025-04-28",
+      "status": "coming-soon"
+    },
+    {
+      "id": "vps-monitor",
+      "title": "VPS Monitor",
+      "description": "Herramienta para monitorizar el estado del servidor: RAM, contenedores Docker activos y servicios.",
+      "file": "vps-monitor.html",
+      "icon": "🖥",
+      "tags": ["infraestructura", "devops"],
+      "date": "2025-04-20",
+      "status": "coming-soon"
+    },
+    {
+      "id": "ejemplo",
+      "title": "Artefacto de Ejemplo",
+      "description": "Plantilla base para nuevos artefactos. Úsala como punto de partida.",
+      "file": "ejemplo.html",
+      "icon": "⚡",
+      "tags": ["demo"],
+      "date": "2025-04-15"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+name: VPS Deploy Tools
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'html/**'
+      - 'nginx.conf'
+      - 'docker-compose.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy html files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 135.125.102.63
+          username: debian
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: "html/"
+          target: "/home/debian/tools/"
+          strip_components: 0
+
+      - name: Restart container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 135.125.102.63
+          username: debian
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            sudo docker compose -f ~/tools/docker-compose.yml restart
+            sleep 2
+            curl -sf http://localhost:4001 > /dev/null && echo "OK - tools-library up" || echo "WARN - container not responding"

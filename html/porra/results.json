@@ -1,0 +1,20 @@
+{
+  "updated": "2026-06-12T07:00:00.000Z",
+  "groups": {
+    "0": [2, 0],
+    "1": [2, 1]
+  },
+  "reached": {
+    "r32": [],
+    "r16": [],
+    "qf": [],
+    "sf": [],
+    "final": []
+  },
+  "champion": null,
+  "individuals": {
+    "scorer": null,
+    "mvp": null,
+    "young": null
+  }
+}
