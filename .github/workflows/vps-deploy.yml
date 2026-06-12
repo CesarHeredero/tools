@@ -16,7 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Sync files and restart container
+      - name: Copy html files to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 135.125.102.63
+          username: debian
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          source: "html/"
+          target: "/home/debian/tools/"
+          strip_components: 0
+
+      - name: Restart container
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: 135.125.102.63
@@ -24,8 +35,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            cd ~/tools
-            git pull origin main
-            sudo docker compose restart
+            sudo docker compose -f ~/tools/docker-compose.yml restart
             sleep 2
             curl -sf http://localhost:4001 > /dev/null && echo "OK - tools-library up" || echo "WARN - container not responding"
