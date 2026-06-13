@@ -94,6 +94,7 @@ ESPN_MAP = {
     "Turkiye":              "Turkey",
     "Bosnia-Herz.":         "Bosnia and Herzegovina",
     "Bosnia & Herzegovina": "Bosnia and Herzegovina",
+    "Bosnia-Herzegovina":   "Bosnia and Herzegovina",
     "Côte d'Ivoire":        "Ivory Coast",
     "Cote d'Ivoire":        "Ivory Coast",
     "Congo DR":             "DR Congo",
